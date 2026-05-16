@@ -52,6 +52,13 @@ export async function obtenerArtista(idArtista) {
   return res.data
 }
 
+export async function obtenerVariosArtistas(ids) {
+  const res = await api.get('/artists', {
+    params: { ids: ids.join(',') },
+  })
+  return res.data.artists
+}
+
 export async function obtenerAlbumesDelArtista(idArtista, limite = 10) {
   const res = await api.get(`/artists/${idArtista}/albums`, {
     params: { include_groups: 'album,single', limit: limite },
