@@ -1,5 +1,5 @@
-function Loading() {
+function Cargando() {
   return <p className="loading">Cargando...</p>
 }
 
-export default Loading
+export default Cargando

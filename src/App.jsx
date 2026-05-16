@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import { FavoritesProvider } from './context/FavoritesContext'
-import HomePage from './pages/HomePage'
-import ArtistPage from './pages/ArtistPage'
-import AlbumPage from './pages/AlbumPage'
+import { ProveedorFavoritos } from './context/FavoritosContext'
+import PaginaInicio from './pages/PaginaInicio'
+import PaginaArtista from './pages/PaginaArtista'
+import PaginaAlbum from './pages/PaginaAlbum'
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
-      <FavoritesProvider>
+      <ProveedorFavoritos>
         <div className="app">
           <header className="app-header">
             <Link to="/" className="logo">SpotiTP</Link>
@@ -16,9 +16,9 @@ function App() {
 
           <main className="app-main">
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/artist/:id" element={<ArtistPage />} />
-              <Route path="/album/:id" element={<AlbumPage />} />
+              <Route path="/" element={<PaginaInicio />} />
+              <Route path="/artist/:id" element={<PaginaArtista />} />
+              <Route path="/album/:id" element={<PaginaAlbum />} />
               <Route path="*" element={<h1>404 - Pagina no encontrada</h1>} />
             </Routes>
           </main>
@@ -27,7 +27,7 @@ function App() {
             <p>TP3 - Desarrollo de Software UTN</p>
           </footer>
         </div>
-      </FavoritesProvider>
+      </ProveedorFavoritos>
     </BrowserRouter>
   )
 }

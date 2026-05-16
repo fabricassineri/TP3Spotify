@@ -3,15 +3,22 @@ import axios from 'axios'
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
 
-const AUTH_URL = 'https://accounts.spotify.com/api/token'
-const API_URL = 'https://api.spotify.com/v1'
+const URL_AUTH = 'https://accounts.spotify.com/api/token'
+const URL_API = 'https://api.spotify.com/v1'
 
-let accessToken = null
-let tokenExpiresAt = 0
+let token = null
+let tokenExpira = 0
 
-async function getAccessToken() {
-  if (accessToken && Date.now() < tokenExpiresAt) {
-    return accessToken
+async function obtenerToken() {
+  if (token && Date.now() < tokenExpira) {
+    return token
+  }
+
+  console.log('CLIENT_ID:', CLIENT_ID)
+  console.log('CLIENT_SECRET length:', CLIENT_SECRET?.length)
+
+  if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new Error('Faltan credenciales en el archivo .env')
   }
 
   const body = new URLSearchParams()
@@ -19,49 +26,48 @@ async function getAccessToken() {
   body.append('client_id', CLIENT_ID)
   body.append('client_secret', CLIENT_SECRET)
 
-  const response = await axios.post(AUTH_URL, body, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  })
+  try {
+    const respuesta = await axios.post(URL_AUTH, body, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    })
 
-  if (!response.data.access_token) {
-    throw new Error('No se recibio access_token de Spotify')
+    token = respuesta.data.access_token
+    tokenExpira = Date.now() + respuesta.data.expires_in * 1000
+    return token
+  } catch (err) {
+    console.error('Error auth Spotify:', err.response?.data || err.message)
+    throw new Error('No se pudo autenticar con Spotify. Revisa credenciales.')
   }
-
-  accessToken = response.data.access_token
-  tokenExpiresAt = Date.now() + response.data.expires_in * 1000
-
-  return accessToken
 }
 
-const api = axios.create({ baseURL: API_URL })
+const api = axios.create({ baseURL: URL_API })
 
 api.interceptors.request.use(async (config) => {
-  const token = await getAccessToken()
-  if (!token) throw new Error('Token vacio')
-  config.headers.Authorization = `Bearer ${token}`
+  const t = await obtenerToken()
+  config.headers.Authorization = `Bearer ${t}`
   return config
 })
 
-export async function searchArtists(query, limit = 20) {
+export async function buscarArtistas(nombre, limite = 20) {
   const res = await api.get('/search', {
-    params: { q: query, type: 'artist', limit },
+    params: { q: nombre, type: 'artist', limit: limite },
   })
   return res.data.artists.items
 }
 
-export async function getArtist(artistId) {
-  const res = await api.get(`/artists/${artistId}`)
+export async function obtenerArtista(idArtista) {
+  const res = await api.get(`/artists/${idArtista}`)
   return res.data
 }
 
-export async function getArtistAlbums(artistId, limit = 50) {
-  const res = await api.get(`/artists/${artistId}/albums`, {
-    params: { include_groups: 'album,single', limit },
+export async function obtenerAlbumesDelArtista(idArtista, limite = 50) {
+  const res = await api.get(`/artists/${idArtista}/albums`, {
+    params: { include_groups: 'album,single', limit: limite },
   })
   return res.data.items
 }
 
-export async function getAlbum(albumId) {
-  const res = await api.get(`/albums/${albumId}`)
+export async function obtenerAlbum(idAlbum) {
+  const res = await api.get(`/albums/${idAlbum}`)
   return res.data
 }

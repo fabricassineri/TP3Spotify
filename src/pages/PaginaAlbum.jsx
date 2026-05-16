@@ -1,45 +1,45 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getAlbum } from '../services/spotifyApi'
-import Loading from '../components/Loading'
-import ErrorMessage from '../components/ErrorMessage'
+import { obtenerAlbum } from '../services/spotifyApi'
+import Cargando from '../components/Cargando'
+import MensajeError from '../components/MensajeError'
 
-function formatDuration(ms) {
-  const totalSec = Math.floor(ms / 1000)
-  const min = Math.floor(totalSec / 60)
-  const sec = totalSec % 60
-  return `${min}:${sec.toString().padStart(2, '0')}`
+function formatearDuracion(ms) {
+  const totalSeg = Math.floor(ms / 1000)
+  const min = Math.floor(totalSeg / 60)
+  const seg = totalSeg % 60
+  return `${min}:${seg.toString().padStart(2, '0')}`
 }
 
-function AlbumPage() {
+function PaginaAlbum() {
   const { id } = useParams()
   const [album, setAlbum] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(null)
-  const [currentPreview, setCurrentPreview] = useState(null)
+  const [previewActual, setPreviewActual] = useState(null)
 
   useEffect(() => {
-    async function loadAlbum() {
-      setLoading(true)
+    async function cargar() {
+      setCargando(true)
       setError(null)
       try {
-        const data = await getAlbum(id)
+        const data = await obtenerAlbum(id)
         setAlbum(data)
       } catch (err) {
         setError(err.message)
       } finally {
-        setLoading(false)
+        setCargando(false)
       }
     }
-    loadAlbum()
+    cargar()
   }, [id])
 
-  if (loading) return <Loading />
-  if (error) return <ErrorMessage message={error} />
+  if (cargando) return <Cargando />
+  if (error) return <MensajeError mensaje={error} />
   if (!album) return null
 
-  const image = album.images?.[0]?.url
-  const tracks = album.tracks?.items || []
+  const imagen = album.images?.[0]?.url
+  const canciones = album.tracks?.items || []
 
   return (
     <div className="page">
@@ -48,7 +48,7 @@ function AlbumPage() {
       </Link>
 
       <div className="album-header">
-        {image && <img src={image} alt={album.name} className="album-img" />}
+        {imagen && <img src={imagen} alt={album.name} className="album-img" />}
         <div>
           <h1>{album.name}</h1>
           <p>{album.artists.map((a) => a.name).join(', ')}</p>
@@ -60,7 +60,7 @@ function AlbumPage() {
 
       <h2>Canciones</h2>
       <ul className="track-list">
-        {tracks.map((track, i) => (
+        {canciones.map((track, i) => (
           <li key={track.id} className="track-item">
             <span className="track-number">{i + 1}</span>
             <div className="track-info">
@@ -69,17 +69,17 @@ function AlbumPage() {
                 {track.artists.map((a) => a.name).join(', ')}
               </p>
             </div>
-            <span className="track-duration">{formatDuration(track.duration_ms)}</span>
+            <span className="track-duration">{formatearDuracion(track.duration_ms)}</span>
             {track.preview_url ? (
               <button
                 className="play-btn"
                 onClick={() =>
-                  setCurrentPreview(
-                    currentPreview === track.preview_url ? null : track.preview_url
+                  setPreviewActual(
+                    previewActual === track.preview_url ? null : track.preview_url
                   )
                 }
               >
-                {currentPreview === track.preview_url ? '■' : '▶'}
+                {previewActual === track.preview_url ? '■' : '▶'}
               </button>
             ) : (
               <span className="no-preview">sin preview</span>
@@ -88,13 +88,13 @@ function AlbumPage() {
         ))}
       </ul>
 
-      {currentPreview && (
+      {previewActual && (
         <div className="player">
-          <audio src={currentPreview} controls autoPlay onEnded={() => setCurrentPreview(null)} />
+          <audio src={previewActual} controls autoPlay onEnded={() => setPreviewActual(null)} />
         </div>
       )}
     </div>
   )
 }
 
-export default AlbumPage
+export default PaginaAlbum
