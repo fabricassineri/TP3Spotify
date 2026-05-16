@@ -15,7 +15,7 @@
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1db954;
+  color: #a855f7;
 }
 
 .app-main {
@@ -37,4 +37,124 @@
   font-size: 0.9rem;
   color: #aaa;
   border-top: 1px solid #333;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #2a2a2a;
+  color: white;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #a855f7;
+}
+
+.search-btn {
+  padding: 0.7rem 1.5rem;
+  background-color: #a855f7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.search-btn:hover {
+  background-color: #9333ea;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  display: block;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.card-img-placeholder {
+  background-color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #888;
+}
+
+.card-body {
+  padding: 0.8rem;
+}
+
+.card-body h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fav-btn {
+  width: 100%;
+  padding: 0.4rem;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.fav-btn:hover {
+  background-color: #444;
+}
+
+.favorites-section {
+  margin-bottom: 2rem;
+}
+
+.favorites-section h2,
+section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #aaa;
+}
+
+.error {
+  background-color: #4a1a1a;
+  color: #ff8888;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #884444;
 }
