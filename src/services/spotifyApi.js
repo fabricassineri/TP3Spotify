@@ -19,7 +19,13 @@ async function getAccessToken() {
   body.append('client_id', CLIENT_ID)
   body.append('client_secret', CLIENT_SECRET)
 
-  const response = await axios.post(AUTH_URL, body)
+  const response = await axios.post(AUTH_URL, body, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  })
+
+  if (!response.data.access_token) {
+    throw new Error('No se recibio access_token de Spotify')
+  }
 
   accessToken = response.data.access_token
   tokenExpiresAt = Date.now() + response.data.expires_in * 1000
@@ -31,6 +37,7 @@ const api = axios.create({ baseURL: API_URL })
 
 api.interceptors.request.use(async (config) => {
   const token = await getAccessToken()
+  if (!token) throw new Error('Token vacio')
   config.headers.Authorization = `Bearer ${token}`
   return config
 })
