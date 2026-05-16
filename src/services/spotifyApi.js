@@ -44,7 +44,8 @@ const api = axios.create({ baseURL: URL_API })
 
 api.interceptors.request.use(async (config) => {
   const t = await obtenerToken()
-  config.headers.Authorization = `Bearer ${t}`
+  config.headers.set('Authorization', `Bearer ${t}`)
+  console.log('Authorization header:', config.headers.get('Authorization')?.substring(0, 20) + '...')
   return config
 })
 
