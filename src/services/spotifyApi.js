@@ -14,18 +14,12 @@ async function getAccessToken() {
     return accessToken
   }
 
-  const credentials = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
+  const body = new URLSearchParams()
+  body.append('grant_type', 'client_credentials')
+  body.append('client_id', CLIENT_ID)
+  body.append('client_secret', CLIENT_SECRET)
 
-  const response = await axios.post(
-    AUTH_URL,
-    'grant_type=client_credentials',
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${credentials}`,
-      },
-    }
-  )
+  const response = await axios.post(AUTH_URL, body)
 
   accessToken = response.data.access_token
   tokenExpiresAt = Date.now() + response.data.expires_in * 1000
