@@ -158,3 +158,42 @@ section h2 {
   border-radius: 6px;
   border: 1px solid #884444;
 }
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #a855f7;
+  font-size: 0.95rem;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.artist-header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #222;
+  border-radius: 8px;
+}
+
+.artist-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.genres {
+  color: #aaa;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.card-info {
+  font-size: 0.85rem;
+  color: #aaa;
+}
