@@ -38,5 +38,4 @@ Trabajo Practico 3 de Desarrollo de Software (UTN). SPA en React que consume la 
 - `/album/:id` - Canciones del album con reproductor de preview de 30 seg
 
 ## Deploy
-
-(Pendiente de subir a Vercel/Netlify)
+[Ver aplicación](https://tp-3-spotify-liard.vercel.app/)
